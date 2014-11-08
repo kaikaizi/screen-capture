@@ -35,62 +35,25 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #include <X11/cursorfont.h>
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <ctype.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <errno.h>
-#include <dirent.h>
 #include <stdarg.h>
 #include <time.h>
 #include <signal.h>
 #include <sys/wait.h>
-#include <giblib/giblib.h>
-
-
-//#include "config.h"
-#include "structs.h"
-#include "getopt.h"
-#include "debug.h"
 
 #ifndef __GNUC__
 # define __attribute__(x)
 #endif
 
-typedef void (*sighandler_t) (int);
-
-void show_usage(void);
-void show_version(void);
-void show_mini_usage(void);
-void init_x_and_imlib(char *dispstr, int screen_num);
-char *chop_file_from_full_path(char *str);
-Imlib_Image scrot_grab_shot(void);
-void scrot_exec_app(Imlib_Image image, struct tm *tm,
-                    char *filename_im, char *filename_thumb);
-void scrot_do_delay(void);
+void init_x_and_imlib(char *dispstr);
 void scrot_sel_and_grab_image(void);
-Imlib_Image scrot_grab_focused(void);
-void scrot_sel_area(int *x, int *y, int *w, int *h);
-void scrot_nice_clip();
-int scrot_get_geometry(Window target, int *rx, int *ry, int *rw, int *rh);
-Window scrot_get_window(Display *display,Window window,int x,int y);
-Window scrot_get_client_window(Display * display, Window target);
-Window scrot_find_window_by_property(Display * display, const Window window,
-                                     const Atom property);
-char *im_printf(char *str, struct tm *tm,
-                char *filename_im, char *filename_thumb,
-                Imlib_Image im);
-Imlib_Image scrot_grab_shot_multi(void);
-Imlib_Image stalk_image_concat(gib_list *images);
 
-/* Imlib stuff */
 extern Display *disp;
-extern Visual *vis;
-extern Colormap cm;
-extern int depth;
 
 /* Thumbnail sizes */
 extern Window root;

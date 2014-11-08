@@ -1,6 +1,6 @@
-LDFLAGS=-L/usr/X11R6/lib -lX11 -lgiblib -lImlib2 -lpthread
-CFLAGS=-Wall -I/usr/X11R6/include -I.
+LDFLAGS=-L/usr/X11R6/lib -lX11
+CFLAGS=-Wall -I/usr/X11R6/include -O3
 
-main:main.c imlib.o options.o
+screen_capture:screen_capture.c imlib.o
 clean:
-	$(RM) *.png
+	$(RM) screen_capture

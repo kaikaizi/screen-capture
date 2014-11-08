@@ -24,7 +24,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
 #include "scrot.h"
-#include "options.h"
 
 Display *disp = NULL;
 Visual *vis = NULL;
@@ -34,24 +33,15 @@ int depth;
 Window root = 0;
 
 void
-init_x_and_imlib(char *dispstr, int screen_num)
+init_x_and_imlib(char *dispstr)
 {
    disp = XOpenDisplay(dispstr);
    if (!disp)
-      gib_eprintf("Can't open X display. It *is* running, yeah?");
-   if (screen_num)
-      scr = ScreenOfDisplay(disp, screen_num);
-   else
-      scr = ScreenOfDisplay(disp, DefaultScreen(disp));
+      fprintf(stderr, "Can't open X display. It *is* running, yeah?");
+   scr = ScreenOfDisplay(disp, DefaultScreen(disp));
 
    vis = DefaultVisual(disp, XScreenNumberOfScreen(scr));
    depth = DefaultDepth(disp, XScreenNumberOfScreen(scr));
    cm = DefaultColormap(disp, XScreenNumberOfScreen(scr));
    root = RootWindow(disp, XScreenNumberOfScreen(scr));
-
-   imlib_context_set_display(disp);
-   imlib_context_set_visual(vis);
-   imlib_context_set_colormap(cm);
-   imlib_context_set_color_modifier(NULL);
-   imlib_context_set_operation(IMLIB_OP_COPY);
 }
