@@ -4,10 +4,11 @@ use Imager::Screenshot 'screenshot';
 use Time::HiRes 'sleep';
 use Const::Fast;
 
-const my %constant=>(max_duration=>10,      # sec
+const my %constant=>(max_duration=>20,      # sec
    out_name=>'/tmp/test.gif', fps=>13,      # output filename, frame per sec
-   resize_option=>'--resize-fit 300x300 --resize-method lanczos3');
-const my $delay=>1/$constant{fps};    # in unit of msec
+   time_rescale_factor => 1.3,
+   resize_option=>'--resize-fit 300x200 --resize-method lanczos3');
+const my $delay=>$constant{time_rescale_factor}/$constant{fps};    # in unit of sec
 const my $max_frames=>$constant{fps}*$constant{max_duration};
 my @frames; my $interrupt=0;
 $SIG{INT}=sub{$interrupt=1};          # installs interrupt signal handler
@@ -26,7 +27,7 @@ sub capture{
    Imager->write_multi({file => $constant{out_name},
 	   type => 'gif',
 	   gif_loop => 0, # loop forever
-	   gif_delay => $delay*100,              # in unit of 10ms
+	   gif_delay => $delay*100, # in unit of 10ms
 	   gif_interlace =>1
 	}, @frames)
 	or croak "Cannot write $constant{out_name}: ", Imager->errstr, "\n";
@@ -34,8 +35,7 @@ sub capture{
 }
 
 sub post_process{                     # resize, optimize
-   system qq(gifsicle -O3 $constant{resize_option} $constant{out_name} > $constant{out_name}.'1');
-   system qq(mv $constant{out_name}.'1' $constant{out_name});
+   system qq(gifsicle -b -O3 $constant{resize_option} $constant{out_name});
    `gifview -a $constant{out_name}`
 }
 
